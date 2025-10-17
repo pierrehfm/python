@@ -24,7 +24,6 @@ for col in df.select_dtypes(include=["int64"]).columns:
 
 gc.collect()
 
-
 # Suppression des doublons (par dates)
 avant = len(df)
 df = df.drop_duplicates(subset=["Date"])
@@ -35,7 +34,6 @@ print(f"Doublons supprimés : {avant - apres}")
 df = df.sort_values("Date").reset_index(drop=True)
 df["date_diff"] = df["Date"].diff().dt.days
 ecarts_uniques = df["date_diff"].dropna().unique()
-# print(f"Écarts observés entre deux dates consécutives : {ecarts_uniques}")
 grands_ecarts = df[df["date_diff"] > 3]
 if grands_ecarts.empty:
     print("Les dates se suivent correctement (écarts normaux de 1 à 3 jours).")
@@ -81,7 +79,7 @@ plt.title('Corrélation entre variables clés : Prix, Volume, Volatilité')
 plt.tight_layout()
 # plt.show()
 
-# 3Histogramme des rendements journaliers
+# Histogramme des rendements journaliers
 plt.figure(figsize=(10,4))
 plt.hist(df['Return'].dropna(), bins=100, color='skyblue', edgecolor='black')
 plt.title('Distribution des rendements journaliers du CAC40')
@@ -148,7 +146,7 @@ plt.grid(True)
 plt.tight_layout()
 # plt.show()
 
-
+# Pediction avec ML
 df['MA_10'] = df['Close'].rolling(10).mean()
 df['MA_20'] = df['Close'].rolling(20).mean()
 df['Momentum_20'] = df['Close'] - df['Close'].shift(20)
